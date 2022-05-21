@@ -63,7 +63,7 @@
                 <strong>{{ error_message }}</strong>
             </div>
         </div>
-
+        <h1>Bookings</h1>
         <br>
         <table class="table">
             <thead>
@@ -222,6 +222,7 @@ export default {
             this.bookModal = false
             this.booking_data.id = ""
             this.booking_data.status = ""
+            this.error = ''
         },
         deleteModalOn(item, index) {
             this.deleteModal = true
@@ -236,7 +237,7 @@ export default {
                     return
                 }
 
-                if (moment(this.booking_data.appointment).format('dddd') == this.bookings[this.editIndex].schedule.day) {
+                if (moment(this.booking_data.appointment).format('dddd') != this.bookings[this.editIndex].schedule.day) {
                     this.error = 'Please provide a date on ' + this.bookings[this.editIndex].schedule.day + ' your booking!'
                     return
                 }

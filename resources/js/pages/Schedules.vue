@@ -150,7 +150,7 @@
 
         </Modal>
 
-
+        <h1>Schedules</h1>
 
         <div class="col-md-6">
             <div>

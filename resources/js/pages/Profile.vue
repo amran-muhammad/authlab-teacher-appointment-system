@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Profile</h1>
         <div class="card card-default">
             <div  v-if="success_message != ''"
                 class="alert alert-success alert-dismissible fade show" role="alert">

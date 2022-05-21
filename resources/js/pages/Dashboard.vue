@@ -58,7 +58,7 @@
             </div>
         </div>
 
-
+        <h1>Dashboard</h1>
         <div class="col-md-6">
             <div class="form-group row">
                 <div class="col-md-8">

@@ -6,6 +6,11 @@
         <Modal v-model="addModal" title="Add new student" @on-ok="addStudent" @on-cancel="addModal = false"
             ok-text="Save" draggable sticky loading>
             <div class="col-md-12">
+                <div v-if="error != ''" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button @click="error=''" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                    <strong>{{ error }}</strong>
+                </div>
                 <div class="card card-default">
                     <div class="card-body">
                         <div>
@@ -128,7 +133,7 @@
         </Modal>
 
         <div class="col-md-6">
-            Wellcome to students, this page will show to admin
+            <h1>Students</h1>
             <br>
             Total students: {{ students.length }}
             <br>
@@ -219,6 +224,7 @@ export default {
     name: "Students",
     data() {
         return {
+            error: ref(''),
             students: [],
             loader: true,
             addModal: ref(false),
@@ -275,10 +281,33 @@ export default {
             })
         },
         addStudent() {
+            if (this.form_data.name == "") {
+                this.error = "Name is required!"
+                return
+            }
+            else if (this.form_data.email == "") {
+                this.error = "Email is required!"
+                return
+            }
+            else if (this.form_data.password == "") {
+                this.error = "Password is required!"
+                return
+            }
+            
+            else if (this.form_data.department == "") {
+                this.error = "Department is required!"
+                return
+            }
+            
+            else if (this.form_data.student_id == '') {
+                this.error = "Student ID is required!"
+                return
+            }
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('/api/user/create/new/student', this.form_data)
                     .then(response => {
                         if (response.data.data) {
+                            this.addModal = false
                             this.students.unshift(response.data.data)
                         } else {
                             console.log(response);

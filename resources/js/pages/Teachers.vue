@@ -7,6 +7,11 @@
         <Modal v-model="addModal" title="Add New Teacher" @on-ok="addTeacher" @on-cancel="addModal = false"
             ok-text="Confirm" draggable sticky loading>
             <div class="col-md-12">
+                <div v-if="error != ''" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button @click="error=''" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                    <strong>{{ error }}</strong>
+                </div>
                 <div class="card card-default">
 
                     <div class="card-body">
@@ -150,68 +155,8 @@
 
         </Modal>
 
-
-        <div class="col-md-12">
-            <div class="card card-default">
-
-                <div class="card-body">
-                    <div>
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-4 col-form-label text-md-right">Name</label>
-                            <div class="col-md-8">
-                                <input id="name" type="text" class="form-control" v-model="edit_data.name" required
-                                    autofocus autocomplete="off" placeholder="Enter name">
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-1">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
-                            <div class="col-md-8">
-                                <input id="email" type="email" class="form-control" v-model="edit_data.email" required
-                                    autofocus autocomplete="off" placeholder="Enter email">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row mt-1">
-                            <label for="department" class="col-sm-4 col-form-label text-md-right">Department</label>
-                            <div class="col-md-8">
-                                <select class="form-control" v-model="edit_data.department">
-                                    <option value="">Choose...</option>
-                                    <option value="Department Name 1">Department Name 1</option>
-                                    <option value="Department Name 2">Department Name 2</option>
-                                    <option value="Department Name 3">Department Name 3</option>
-                                    <option value="Department Name 4">Department Name 4</option>
-                                    <option value="Department Name 5">Department Name 5</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mt-1">
-                            <label for="course" class="col-sm-4 col-form-label text-md-right"> Course Name</label>
-                            <div class="col-md-8">
-                                <select class="form-control" v-model="edit_data.course">
-                                    <option value="">Choose...</option>
-                                    <option value="Course Name 1">Course Name 1</option>
-                                    <option value="Course Name 2">Course Name 2</option>
-                                    <option value="Course Name 3">Course Name 3</option>
-                                    <option value="Course Name 4">Course Name 4</option>
-                                    <option value="Course Name 5">Course Name 5</option>
-                                    <option value="Course Name 6">Course Name 6</option>
-                                    <option value="Course Name 7">Course Name 7</option>
-                                    <option value="Course Name 8">Course Name 8</option>
-                                    <option value="Course Name 9">Course Name 9</option>
-                                    <option value="Course Name 10">Course Name 10</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="col-md-6">
-            Wellcome to Teachers, this page will show to admin
+            <h1>Teachers</h1>
             <br>
             Total teachers: {{ teachers.length }}
             <br>
@@ -300,6 +245,7 @@ export default {
     name: "Teachers",
     data() {
         return {
+            error: ref(''),
             addModal: ref(false),
             editModal: ref(false),
             search: ref(''),
@@ -354,10 +300,33 @@ export default {
             })
         },
         addTeacher() {
+           if (this.form_data.name == "") {
+                this.error = "Name is required!"
+                return
+            }
+            else if (this.form_data.email == "") {
+                this.error = "Email is required!"
+                return
+            }
+            else if (this.form_data.password == "") {
+                this.error = "Password is required!"
+                return
+            }
+            
+            else if (this.form_data.department == "") {
+                this.error = "Department is required!"
+                return
+            }
+            
+            else if (this.form_data.course == '') {
+                this.error = "Course is required!"
+                return
+            }
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('/api/user/create/new/teacher', this.form_data)
                     .then(response => {
                         if (response.data.data) {
+                            this.addModal = false
                             this.teachers.unshift(response.data.data)
                         } else {
                             console.log(response);
