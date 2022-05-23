@@ -282,4 +282,19 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function delete_user(Request $request)
+    {
+        $user = Auth::user();
+        if ($user && $user->type == 'Admin') {
+                User::where('id', $request->id)->delete();
+                return response()->json([
+                    'data' => true
+                ]);
+        } else {
+            return response()->json([
+                'data' => false
+            ]);
+        }
+    }
 }

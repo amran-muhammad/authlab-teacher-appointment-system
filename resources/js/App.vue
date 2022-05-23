@@ -18,7 +18,7 @@
             
             
             <div class="navbar-nav" v-if="isLoggedIn">
-                <router-link to="/profile" class="nav-item nav-link">Profile</router-link>
+                <router-link to="/profile" class="nav-item nav-link">{{ type }} Profile ({{name}})</router-link>
                 <a class="nav-item nav-link" style="cursor: pointer;" @click="logout">Logout</a>
             </div>
             <div class="navbar-nav" v-else>
@@ -38,13 +38,15 @@
         data() {
             return {
                 isLoggedIn: false,
-                type:''
+                type:'',
+                name:''
             }
         },
         created() {
             if (window.Laravel.isLoggedin) {
                 this.isLoggedIn = true
                 this.type = window.Laravel.user.type
+                this.name = window.Laravel.user.name
             }
         },
         methods: {

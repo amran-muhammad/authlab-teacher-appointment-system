@@ -1,5 +1,9 @@
 <template>
     <div class="row">
+        <Modal v-model="deleteModal" title="Are you sure delete the student?" @on-ok="deleteStudent"
+            @on-cancel="deleteModal = false" ok-text="Confirm" draggable sticky loading>
+
+        </Modal>
         <Modal v-model="editStatusModal" title="Are you sure update the status?" @on-ok="updateStudentStatus"
             @on-cancel="editStatusModal = false" ok-text="Confirm" draggable sticky loading>
         </Modal>
@@ -210,6 +214,8 @@
                             @click="editStatusModalOn(item, index)">Deactivate</button>
                         <button style="margin-left:5px" class="btn btn-sm btn-secondary"
                             @click="editStudent(item, index)">Edit</button>
+                        <button style="margin-left:5px" class="btn btn-sm btn-danger"
+                            @click="deleteStudentOn(item, index)">Delete</button>
                     </td>
                 </tr>
 
@@ -228,6 +234,7 @@ export default {
             students: [],
             loader: true,
             addModal: ref(false),
+            deleteModal: ref(false),
             editModal: ref(false),
             editStatusModal: ref(false),
             form_data: {
@@ -339,6 +346,7 @@ export default {
                 this.$axios.post('/api/user/update/data', this.edit_data)
                     .then(response => {
                         if (response.data.data) {
+                            this.editModal = false
                             this.students[this.editIndex] = response.data.data
                         } else {
                             console.log(response);
@@ -382,7 +390,31 @@ export default {
                         console.error(error);
                     });
             })
-        }
+        },
+        deleteStudentOn(item, index) {
+            this.deleteModal = true
+            this.editIndex = index
+            this.edit_data.id = item.id
+        },
+        deleteStudent() {
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+                this.$axios.post('/api/user/delete', {
+                    id: this.edit_data.id
+                })
+                    .then(response => {
+                        if (response.data.data) {
+                            this.deleteModal = false
+                            this.students.splice(this.editIndex, 1)
+                            this.editIndex = -1
+                        } else {
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            })
+        },
 
     },
 }

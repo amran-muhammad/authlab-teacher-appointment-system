@@ -3,6 +3,15 @@
         <Modal v-model="bookModal" title="Are you sure book the schecule?" @on-ok="bookingConfirm"
             @on-cancel="bookModal = false" ok-text="Confirm" draggable sticky loading>
             <div class="card card-default">
+                 <div v-if="error_message != ''" class="form-group row">
+                    <div class="col-sm-4"></div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button @click="error_message = ''" type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+
+                        <strong>{{ error_message }}</strong>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     <div>
@@ -46,15 +55,6 @@
                     aria-label="Close"></button>
 
                 <strong>{{ success_message }}</strong>
-            </div>
-        </div>
-        <div v-if="error_message != ''" class="form-group row">
-            <div class="col-sm-4"></div>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <button @click="error_message = ''" type="button" class="btn-close" data-bs-dismiss="alert"
-                    aria-label="Close"></button>
-
-                <strong>{{ error_message }}</strong>
             </div>
         </div>
 

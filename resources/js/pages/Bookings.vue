@@ -68,11 +68,12 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Teacher</th>
+                    <th v-if="user.type == 'Student' || user.type == 'Admin'" scope="col">Teacher</th>
                     <th v-if="user.type == 'Teacher' || user.type == 'Admin'" scope="col">Student</th>
                     <th scope="col">Agenda</th>
                     <th scope="col">Day</th>
                     <th scope="col">Slot</th>
+                    <th scope="col">Applied on</th>
                     <th scope="col">Appointment</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -131,6 +132,9 @@
         item.schedule.end_time + ' AM' : (item.schedule.end_time - 12 == 0 ? 12 :
             item.schedule.end_time - 12) + ' PM'
 }} </td>
+                    <td>
+                        <span v-if="item.created_at">{{item.created_at.substring(0,10) }}</span>
+                    </td>
                     <td>
                         <span v-if="item.appointment">{{ item.appointment }}</span>
                     </td>

@@ -27,6 +27,7 @@ use App\Http\Controllers\API\BookingController;
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('user/delete', [UserController::class, 'delete_user'])->middleware('auth:sanctum');
 Route::post('user/create/new/teacher', [UserController::class, 'create_new_teacher'])->middleware('auth:sanctum');
 Route::post('user/create/new/student', [UserController::class, 'create_new_student'])->middleware('auth:sanctum');
 Route::post('user/update/data', [UserController::class, 'update_user'])->middleware('auth:sanctum');
